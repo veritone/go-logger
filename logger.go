@@ -19,6 +19,9 @@ const (
 
 	TextFormat string = "text"
 	JSONFormat string = "json"
+
+	TimestampFieldName string = "timestamp"
+	MessageFieldName   string = "message"
 )
 
 type Logger struct {
@@ -87,7 +90,12 @@ func (this *Logger) SetFormatter(fmt string) error {
 	case TextFormat:
 		lf = &logrus.TextFormatter{}
 	case JSONFormat:
-		lf = &logrus.JSONFormatter{}
+		lf = &logrus.JSONFormatter{
+			FieldMap: logrus.FieldMap{
+				logrus.FieldKeyTime: TimestampFieldName,
+				logrus.FieldKeyMsg:  MessageFieldName,
+			},
+		}
 	default:
 		return errors.New("Unknown format!")
 	}
